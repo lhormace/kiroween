@@ -1,0 +1,184 @@
+{
+  "foods": [
+    {
+      "name": "ご飯",
+      "aliases": ["白米", "米", "ライス", "めし"],
+      "servingSize": "1杯(150g)",
+      "calories": 252,
+      "protein": 3.8,
+      "fat": 0.5,
+      "carbohydrate": 55.7
+    },
+    {
+      "name": "パン",
+      "aliases": ["食パン", "トースト", "ブレッド"],
+      "servingSize": "1枚(60g)",
+      "calories": 158,
+      "protein": 5.6,
+      "fat": 2.6,
+      "carbohydrate": 28.0
+    },
+    {
+      "name": "卵",
+      "aliases": ["たまご", "玉子", "エッグ"],
+      "servingSize": "1個(50g)",
+      "calories": 76,
+      "protein": 6.2,
+      "fat": 5.2,
+      "carbohydrate": 0.2
+    },
+    {
+      "name": "鶏肉",
+      "aliases": ["チキン", "鶏", "とり肉"],
+      "servingSize": "100g",
+      "calories": 191,
+      "protein": 19.5,
+      "fat": 12.0,
+      "carbohydrate": 0.0
+    },
+    {
+      "name": "牛肉",
+      "aliases": ["ビーフ", "牛", "ステーキ"],
+      "servingSize": "100g",
+      "calories": 259,
+      "protein": 17.1,
+      "fat": 21.2,
+      "carbohydrate": 0.3
+    },
+    {
+      "name": "豚肉",
+      "aliases": ["ポーク", "豚", "とん肉"],
+      "servingSize": "100g",
+      "calories": 263,
+      "protein": 17.1,
+      "fat": 21.1,
+      "carbohydrate": 0.2
+    },
+    {
+      "name": "魚",
+      "aliases": ["さかな", "サーモン", "鮭", "まぐろ"],
+      "servingSize": "100g",
+      "calories": 132,
+      "protein": 20.0,
+      "fat": 5.5,
+      "carbohydrate": 0.1
+    },
+    {
+      "name": "納豆",
+      "aliases": ["なっとう"],
+      "servingSize": "1パック(50g)",
+      "calories": 100,
+      "protein": 8.3,
+      "fat": 5.0,
+      "carbohydrate": 6.1
+    },
+    {
+      "name": "豆腐",
+      "aliases": ["とうふ"],
+      "servingSize": "1丁(300g)",
+      "calories": 168,
+      "protein": 14.7,
+      "fat": 10.5,
+      "carbohydrate": 4.8
+    },
+    {
+      "name": "牛乳",
+      "aliases": ["ミルク"],
+      "servingSize": "1杯(200ml)",
+      "calories": 134,
+      "protein": 6.6,
+      "fat": 7.6,
+      "carbohydrate": 9.6
+    },
+    {
+      "name": "ヨーグルト",
+      "aliases": ["yogurt"],
+      "servingSize": "1個(100g)",
+      "calories": 62,
+      "protein": 3.6,
+      "fat": 3.0,
+      "carbohydrate": 4.9
+    },
+    {
+      "name": "バナナ",
+      "aliases": ["banana"],
+      "servingSize": "1本(100g)",
+      "calories": 86,
+      "protein": 1.1,
+      "fat": 0.2,
+      "carbohydrate": 22.5
+    },
+    {
+      "name": "りんご",
+      "aliases": ["リンゴ", "apple"],
+      "servingSize": "1個(200g)",
+      "calories": 114,
+      "protein": 0.4,
+      "fat": 0.4,
+      "carbohydrate": 30.8
+    },
+    {
+      "name": "サラダ",
+      "aliases": ["野菜", "レタス", "salad"],
+      "servingSize": "1皿(100g)",
+      "calories": 12,
+      "protein": 0.6,
+      "fat": 0.1,
+      "carbohydrate": 2.3
+    },
+    {
+      "name": "味噌汁",
+      "aliases": ["みそ汁", "お味噌汁"],
+      "servingSize": "1杯(150ml)",
+      "calories": 30,
+      "protein": 2.2,
+      "fat": 0.9,
+      "carbohydrate": 3.6
+    },
+    {
+      "name": "ラーメン",
+      "aliases": ["らーめん", "中華そば"],
+      "servingSize": "1杯",
+      "calories": 436,
+      "protein": 14.6,
+      "fat": 10.5,
+      "carbohydrate": 69.7
+    },
+    {
+      "name": "カレー",
+      "aliases": ["カレーライス", "curry"],
+      "servingSize": "1皿",
+      "calories": 654,
+      "protein": 15.2,
+      "fat": 18.3,
+      "carbohydrate": 105.6
+    },
+    {
+      "name": "パスタ",
+      "aliases": ["スパゲッティ", "スパゲティ"],
+      "servingSize": "1皿(200g)",
+      "calories": 298,
+      "protein": 10.6,
+      "fat": 1.8,
+      "carbohydrate": 59.0
+    },
+    {
+      "name": "ハンバーガー",
+      "aliases": ["バーガー", "burger"],
+      "servingSize": "1個",
+      "calories": 524,
+      "protein": 25.8,
+      "fat": 27.5,
+      "carbohydrate": 41.0
+    },
+    {
+      "name": "ピザ",
+      "aliases": ["pizza"],
+      "servingSize": "1切れ",
+      "calories": 266,
+      "protein": 11.0,
+      "fat": 10.1,
+      "carbohydrate": 33.0
+    }
+  ]
+}

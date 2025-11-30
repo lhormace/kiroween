@@ -6,4 +6,5 @@ public interface AuthenticationService {
     AuthResult authenticate(String username, String password);
     boolean validateToken(String token);
     void invalidateToken(String token);
+    String getUserIdFromToken(String token);
 }

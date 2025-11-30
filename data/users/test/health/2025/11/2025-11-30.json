@@ -1,0 +1,28 @@
+[ {
+  "userId" : "test",
+  "date" : [ 2025, 11, 30 ],
+  "timestamp" : [ 2025, 11, 30, 22, 10, 0, 373391000 ],
+  "weight" : 65.0,
+  "bodyFatPercentage" : 18.0,
+  "foodItems" : [ "脂肪率は18%です。朝食にご飯と卵を食べました。30分ジョギング" ],
+  "exercises" : [ ],
+  "freeComment" : "今日の体重は65kg、体脂肪率は18%です。朝食にご飯と卵を食べました。30分ジョギングしました。"
+}, {
+  "userId" : "test",
+  "date" : [ 2025, 11, 30 ],
+  "timestamp" : [ 2025, 11, 30, 22, 13, 53, 611678000 ],
+  "weight" : 64.5,
+  "bodyFatPercentage" : 17.5,
+  "foodItems" : [ ],
+  "exercises" : [ ],
+  "freeComment" : "今日の体重は64.5kg、体脂肪率は17.5%です。"
+}, {
+  "userId" : "test",
+  "date" : [ 2025, 11, 30 ],
+  "timestamp" : [ 2025, 11, 30, 22, 14, 20, 953864000 ],
+  "weight" : null,
+  "bodyFatPercentage" : null,
+  "foodItems" : [ ],
+  "exercises" : [ ],
+  "freeComment" : "体重は６０kgです"
+} ]
