@@ -1,10 +1,13 @@
-com/health/chat/service/ErrorHandlingTest$TestContext$1.class
 com/health/chat/service/MessageParserTest.class
+com/health/chat/service/ErrorHandlingTest.class
+com/health/chat/integration/AuthenticationIntegrationTest.class
+com/health/chat/service/ErrorHandlingTest$TestContext.class
+com/health/chat/service/ErrorHandlingTest$TestContext$1.class
+com/health/chat/web/AuthControllerTest.class
 com/health/chat/service/HealthAdvisorAITest.class
 com/health/chat/service/MentalStateAnalyzerTest.class
 com/health/chat/service/NutritionEstimatorTest.class
 com/health/chat/service/HealthAdvisorAITest$MockMCPClient.class
-com/health/chat/service/ErrorHandlingTest.class
 com/health/chat/service/InputValidationTest.class
+com/health/chat/service/JwtAuthenticationServiceTest.class
 com/health/chat/SetupVerificationTest.class
-com/health/chat/service/ErrorHandlingTest$TestContext.class

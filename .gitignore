@@ -24,3 +24,30 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Elastic Beanstalk
+.elasticbeanstalk/
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# AWS
+.aws/
+
+# CDK
+cdk/cdk.out/
+cdk/.cdk.staging/
+cdk/node_modules/
+
+# Docker
+.dockerignore
+
+# Local data
+data/users/*/
+
+# Credentials (NEVER commit!)
+CREDENTIALS.md
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

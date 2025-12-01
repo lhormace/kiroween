@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分析 - 健康管理チャットアドバイザー</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .analysis-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .time-range-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .time-range-btn {
+            padding: 8px 16px;
+            border: 1px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .time-range-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .time-range-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .nutrition-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .nutrition-item .label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .nutrition-item .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .mental-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .mental-stat {
+            text-align: center;
+        }
+
+        .mental-stat .emoji {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .mental-stat .label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .mental-stat .count {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .tanka-list {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .tanka-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .tanka-date {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .tanka-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>健康管理チャットアドバイザー</h1>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="nav-links">
+                <a href="/chat" class="nav-link">チャット</a>
+                <a href="/analysis" class="nav-link" style="background: rgba(255, 255, 255, 0.2);">分析</a>
+            </div>
+            <form method="post" action="/logout" style="display: inline;">
+                <button type="submit" class="logout-btn">ログアウト</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="page-title">健康データ分析</h1>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>記録データ数</h3>
+                <div class="value" th:text="${healthDataCount}">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>短歌作成数</h3>
+                <div class="value" th:text="${tankaCount}">0</div>
+            </div>
+        </div>
+
+        <!-- 栄養分析 -->
+        <div class="analysis-section">
+            <div class="section-header">
+                <h2>🍽️ 栄養分析</h2>
+                <div class="time-range-selector">
+                    <button class="time-range-btn active" data-section="nutrition" data-range="ONE_MONTH">1ヶ月</button>
+                    <button class="time-range-btn" data-section="nutrition" data-range="THREE_MONTHS">3ヶ月</button>
+                    <button class="time-range-btn" data-section="nutrition" data-range="SIX_MONTHS">6ヶ月</button>
+                </div>
+            </div>
+            <div id="nutritionLoading" class="loading">読み込み中...</div>
+            <div id="nutritionContent" style="display: none;">
+                <div class="nutrition-grid">
+                    <div class="nutrition-item">
+                        <div class="label">平均カロリー</div>
+                        <div class="value" id="avgCalories">0</div>
+                        <div class="label">kcal</div>
+                    </div>
+                    <div class="nutrition-item">
+                        <div class="label">平均タンパク質</div>
+                        <div class="value" id="avgProtein">0</div>
+                        <div class="label">g</div>
+                    </div>
+                    <div class="nutrition-item">
+                        <div class="label">平均脂質</div>
+                        <div class="value" id="avgFat">0</div>
+                        <div class="label">g</div>
+                    </div>
+                    <div class="nutrition-item">
+                        <div class="label">平均炭水化物</div>
+                        <div class="value" id="avgCarbs">0</div>
+                        <div class="label">g</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- メンタル分析 -->
+        <div class="analysis-section">
+            <div class="section-header">
+                <h2>💭 メンタル分析</h2>
+                <div class="time-range-selector">
+                    <button class="time-range-btn active" data-section="mental" data-range="ONE_MONTH">1ヶ月</button>
+                    <button class="time-range-btn" data-section="mental" data-range="THREE_MONTHS">3ヶ月</button>
+                    <button class="time-range-btn" data-section="mental" data-range="SIX_MONTHS">6ヶ月</button>
+                </div>
+            </div>
+            <div id="mentalLoading" class="loading">読み込み中...</div>
+            <div id="mentalContent" style="display: none;">
+                <div class="mental-stats">
+                    <div class="mental-stat">
+                        <div class="emoji">😊</div>
+                        <div class="label">ポジティブ</div>
+                        <div class="count" id="positiveCount">0</div>
+                    </div>
+                    <div class="mental-stat">
+                        <div class="emoji">😐</div>
+                        <div class="label">ニュートラル</div>
+                        <div class="count" id="neutralCount">0</div>
+                    </div>
+                    <div class="mental-stat">
+                        <div class="emoji">😔</div>
+                        <div class="label">落ち込み気味</div>
+                        <div class="count" id="discouragedCount">0</div>
+                    </div>
+                </div>
+                <div style="margin-top: 30px; text-align: center;">
+                    <div style="font-size: 14px; color: #999; margin-bottom: 10px;">平均モチベーション</div>
+                    <div style="font-size: 36px; font-weight: bold; color: #667eea;" id="avgMotivation">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 短歌一覧 -->
+        <div class="analysis-section">
+            <div class="section-header">
+                <h2>🌸 短歌一覧</h2>
+                <div class="time-range-selector">
+                    <button class="time-range-btn active" data-section="tanka" data-range="ONE_MONTH">1ヶ月</button>
+                    <button class="time-range-btn" data-section="tanka" data-range="THREE_MONTHS">3ヶ月</button>
+                    <button class="time-range-btn" data-section="tanka" data-range="SIX_MONTHS">6ヶ月</button>
+                </div>
+            </div>
+            <div id="tankaLoading" class="loading">読み込み中...</div>
+            <div id="tankaContent" style="display: none;">
+                <div class="tanka-list" id="tankaList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRanges = {
+            nutrition: 'ONE_MONTH',
+            mental: 'ONE_MONTH',
+            tanka: 'ONE_MONTH'
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNutritionAnalysis('ONE_MONTH');
+            loadMentalAnalysis('ONE_MONTH');
+            loadTankas('ONE_MONTH');
+
+            // Add event listeners to all time range buttons
+            document.querySelectorAll('.time-range-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const section = btn.dataset.section;
+                    const range = btn.dataset.range;
+
+                    // Update active state for this section
+                    document.querySelectorAll(`.time-range-btn[data-section="${section}"]`).forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    btn.classList.add('active');
+
+                    // Load data for this section
+                    currentRanges[section] = range;
+                    
+                    if (section === 'nutrition') {
+                        loadNutritionAnalysis(range);
+                    } else if (section === 'mental') {
+                        loadMentalAnalysis(range);
+                    } else if (section === 'tanka') {
+                        loadTankas(range);
+                    }
+                });
+            });
+        });
+
+        function loadNutritionAnalysis(timeRange) {
+            document.getElementById('nutritionLoading').style.display = 'block';
+            document.getElementById('nutritionContent').style.display = 'none';
+
+            fetch(`/api/analysis/nutrition?timeRange=${timeRange}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('avgCalories').textContent = data.averageCalories.toFixed(1);
+                    document.getElementById('avgProtein').textContent = data.averageProtein.toFixed(1);
+                    document.getElementById('avgFat').textContent = data.averageFat.toFixed(1);
+                    document.getElementById('avgCarbs').textContent = data.averageCarbs.toFixed(1);
+
+                    document.getElementById('nutritionLoading').style.display = 'none';
+                    document.getElementById('nutritionContent').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error loading nutrition analysis:', error);
+                    document.getElementById('nutritionLoading').innerHTML = '<div class="no-data">データの読み込みに失敗しました</div>';
+                });
+        }
+
+        function loadMentalAnalysis(timeRange) {
+            document.getElementById('mentalLoading').style.display = 'block';
+            document.getElementById('mentalContent').style.display = 'none';
+
+            fetch(`/api/analysis/mental?timeRange=${timeRange}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('positiveCount').textContent = data.positive;
+                    document.getElementById('neutralCount').textContent = data.neutral;
+                    document.getElementById('discouragedCount').textContent = data.discouraged;
+                    document.getElementById('avgMotivation').textContent = (data.averageMotivation * 100).toFixed(0) + '%';
+
+                    document.getElementById('mentalLoading').style.display = 'none';
+                    document.getElementById('mentalContent').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error loading mental analysis:', error);
+                    document.getElementById('mentalLoading').innerHTML = '<div class="no-data">データの読み込みに失敗しました</div>';
+                });
+        }
+
+        function loadTankas(timeRange) {
+            document.getElementById('tankaLoading').style.display = 'block';
+            document.getElementById('tankaContent').style.display = 'none';
+
+            fetch(`/api/analysis/tankas?timeRange=${timeRange}`)
+                .then(response => response.json())
+                .then(data => {
+                    const tankaList = document.getElementById('tankaList');
+                    tankaList.innerHTML = '';
+
+                    if (data.tankas && data.tankas.length > 0) {
+                        data.tankas.forEach(tanka => {
+                            const card = document.createElement('div');
+                            card.className = 'tanka-card';
+                            
+                            const date = document.createElement('div');
+                            date.className = 'tanka-date';
+                            date.textContent = tanka.date;
+                            
+                            const text = document.createElement('div');
+                            text.className = 'tanka-text';
+                            text.innerHTML = tanka.lines.join('<br>');
+                            
+                            card.appendChild(date);
+                            card.appendChild(text);
+                            tankaList.appendChild(card);
+                        });
+
+                        document.getElementById('tankaLoading').style.display = 'none';
+                        document.getElementById('tankaContent').style.display = 'block';
+                    } else {
+                        document.getElementById('tankaLoading').innerHTML = '<div class="no-data">短歌がまだありません</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading tankas:', error);
+                    document.getElementById('tankaLoading').innerHTML = '<div class="no-data">データの読み込みに失敗しました</div>';
+                });
+        }
+    </script>
+</body>
+</html>

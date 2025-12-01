@@ -1,8 +1,19 @@
 package com.health.chat.web;
 
-import com.health.chat.model.*;
+import com.health.chat.model.AdviceResult;
+import com.health.chat.model.ChatResponse;
+import com.health.chat.model.EmotionalTone;
+import com.health.chat.model.HealthData;
+import com.health.chat.model.MentalState;
+import com.health.chat.model.NutritionInfo;
+import com.health.chat.model.TankaPoem;
+import com.health.chat.model.UserProfile;
 import com.health.chat.repository.DataRepository;
-import com.health.chat.service.*;
+import com.health.chat.service.HealthAdvisorAI;
+import com.health.chat.service.MentalStateAnalyzer;
+import com.health.chat.service.MessageParser;
+import com.health.chat.service.NutritionEstimator;
+import com.health.chat.service.TankaGenerator;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

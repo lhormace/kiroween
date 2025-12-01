@@ -17,6 +17,7 @@ com/health/chat/lambda/ChatHandler.class
 com/health/chat/service/MCPBasedHealthAdvisor.class
 com/health/chat/repository/LocalFileDataRepository.class
 com/health/chat/service/BasicNutritionEstimator.class
+com/health/chat/web/AnalysisController.class
 com/health/chat/lambda/AnalysisHandler.class
 com/health/chat/service/MessageParser.class
 com/health/chat/service/MCPClient.class
@@ -33,6 +34,7 @@ com/health/chat/service/NutritionEstimator.class
 com/health/chat/repository/S3DataRepository.class
 com/health/chat/model/UserProfile.class
 com/health/chat/service/InputValidator$ValidationResult.class
+com/health/chat/config/AwsConfig.class
 com/health/chat/service/ChartJsGraphGenerator.class
 com/health/chat/model/ResearchReference.class
 com/health/chat/service/InputValidator.class

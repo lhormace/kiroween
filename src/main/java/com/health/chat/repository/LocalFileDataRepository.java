@@ -271,6 +271,69 @@ public class LocalFileDataRepository implements DataRepository {
         return result;
     }
     
+    @Override
+    public List<NutritionInfo> getNutritionInfoByDateRange(String userId, LocalDate start, LocalDate end) {
+        List<NutritionInfo> result = new ArrayList<>();
+        
+        try {
+            LocalDate current = start;
+            while (!current.isAfter(end)) {
+                NutritionInfo info = getNutritionInfo(userId, current);
+                if (info != null) {
+                    result.add(info);
+                }
+                current = current.plusDays(1);
+            }
+            
+            LOGGER.info("Retrieved " + result.size() + " nutrition entries for user: " + userId);
+            
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to retrieve nutrition info by date range", e);
+        }
+        
+        return result;
+    }
+    
+    @Override
+    public List<MentalState> getMentalStatesByDateRange(String userId, LocalDate start, LocalDate end) {
+        List<MentalState> result = new ArrayList<>();
+        
+        try {
+            LocalDate current = start;
+            while (!current.isAfter(end)) {
+                MentalState state = getMentalState(userId, current);
+                if (state != null) {
+                    result.add(state);
+                }
+                current = current.plusDays(1);
+            }
+            
+            LOGGER.info("Retrieved " + result.size() + " mental states for user: " + userId);
+            
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed to retrieve mental states by date range", e);
+        }
+        
+        return result;
+    }
+    
+    @Override
+    public List<TankaPoem> getTankasByDateRange(String userId, LocalDate start, LocalDate end) {
+        List<TankaPoem> allTankas = getTankaHistory(userId);
+        List<TankaPoem> result = new ArrayList<>();
+        
+        for (TankaPoem tanka : allTankas) {
+            LocalDate tankaDate = tanka.getDate();
+            if (!tankaDate.isBefore(start) && !tankaDate.isAfter(end)) {
+                result.add(tanka);
+            }
+        }
+        
+        LOGGER.info("Retrieved " + result.size() + " tankas for user: " + userId + " in date range");
+        
+        return result;
+    }
+    
     private Path getHealthDataPath(String userId, LocalDate date) {
         return Paths.get(baseDirectory, "users", userId, "health", 
                         String.valueOf(date.getYear()),

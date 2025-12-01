@@ -13,10 +13,13 @@ public interface DataRepository {
     List<HealthData> getHealthDataByDateRange(String userId, LocalDate start, LocalDate end);
     void saveNutritionInfo(String userId, LocalDate date, NutritionInfo info);
     NutritionInfo getNutritionInfo(String userId, LocalDate date);
+    List<NutritionInfo> getNutritionInfoByDateRange(String userId, LocalDate start, LocalDate end);
     void saveMentalState(String userId, LocalDate date, MentalState state);
     MentalState getMentalState(String userId, LocalDate date);
+    List<MentalState> getMentalStatesByDateRange(String userId, LocalDate start, LocalDate end);
     void saveTanka(String userId, TankaPoem tanka);
     List<TankaPoem> getTankaHistory(String userId);
+    List<TankaPoem> getTankasByDateRange(String userId, LocalDate start, LocalDate end);
     
     // User profile management
     void saveUserProfile(com.health.chat.model.UserProfile profile);

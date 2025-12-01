@@ -6,6 +6,7 @@ public class UserProfile {
     private String userId;
     private String username;
     private String passwordHash;
+    private String email;
     private LocalDateTime createdAt;
     private LocalDateTime lastLoginAt;
 
@@ -17,6 +18,16 @@ public class UserProfile {
         this.userId = userId;
         this.username = username;
         this.passwordHash = passwordHash;
+        this.createdAt = createdAt;
+        this.lastLoginAt = lastLoginAt;
+    }
+
+    public UserProfile(String userId, String username, String passwordHash, String email,
+                      LocalDateTime createdAt, LocalDateTime lastLoginAt) {
+        this.userId = userId;
+        this.username = username;
+        this.passwordHash = passwordHash;
+        this.email = email;
         this.createdAt = createdAt;
         this.lastLoginAt = lastLoginAt;
     }
@@ -59,5 +70,13 @@ public class UserProfile {
 
     public void setLastLoginAt(LocalDateTime lastLoginAt) {
         this.lastLoginAt = lastLoginAt;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

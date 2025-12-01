@@ -48,8 +48,12 @@ public class HealthChatStack extends Stack {
      * Create S3 bucket with lifecycle policies for cost optimization
      */
     private Bucket createDataBucket() {
+        // Generate unique bucket name with timestamp
+        String timestamp = String.valueOf(System.currentTimeMillis());
+        String bucketName = "health-chat-data-" + this.getAccount() + "-" + timestamp;
+        
         return Bucket.Builder.create(this, "HealthDataBucket")
-                .bucketName("health-chat-data-" + this.getAccount())
+                .bucketName(bucketName)
                 .versioned(false)
                 .lifecycleRules(List.of(
                         LifecycleRule.builder()
@@ -68,9 +72,10 @@ public class HealthChatStack extends Stack {
      * Create Authentication Lambda function
      */
     private Function createAuthLambda(Bucket dataBucket) {
+        String timestamp = String.valueOf(System.currentTimeMillis());
         Function authLambda = Function.Builder.create(this, "AuthLambda")
-                .functionName("health-chat-auth")
-                .runtime(Runtime.JAVA_21)
+                .functionName("health-chat-auth-" + timestamp)
+                .runtime(Runtime.JAVA_17)
                 .handler("com.health.chat.lambda.AuthHandler::handleRequest")
                 .code(Code.fromAsset("../target/health-chat-advisor-1.0.0-SNAPSHOT.jar"))
                 .timeout(Duration.seconds(30))
@@ -92,9 +97,10 @@ public class HealthChatStack extends Stack {
      * Create Chat Lambda function
      */
     private Function createChatLambda(Bucket dataBucket) {
+        String timestamp = String.valueOf(System.currentTimeMillis());
         Function chatLambda = Function.Builder.create(this, "ChatLambda")
-                .functionName("health-chat-chat")
-                .runtime(Runtime.JAVA_21)
+                .functionName("health-chat-chat-" + timestamp)
+                .runtime(Runtime.JAVA_17)
                 .handler("com.health.chat.lambda.ChatHandler::handleRequest")
                 .code(Code.fromAsset("../target/health-chat-advisor-1.0.0-SNAPSHOT.jar"))
                 .timeout(Duration.seconds(30))
@@ -117,9 +123,10 @@ public class HealthChatStack extends Stack {
      * Create Analysis Lambda function
      */
     private Function createAnalysisLambda(Bucket dataBucket) {
+        String timestamp = String.valueOf(System.currentTimeMillis());
         Function analysisLambda = Function.Builder.create(this, "AnalysisLambda")
-                .functionName("health-chat-analysis")
-                .runtime(Runtime.JAVA_21)
+                .functionName("health-chat-analysis-" + timestamp)
+                .runtime(Runtime.JAVA_17)
                 .handler("com.health.chat.lambda.AnalysisHandler::handleRequest")
                 .code(Code.fromAsset("../target/health-chat-advisor-1.0.0-SNAPSHOT.jar"))
                 .timeout(Duration.seconds(30))
@@ -167,11 +174,9 @@ public class HealthChatStack extends Stack {
         authResource.addResource("logout").addMethod("POST", authIntegration);
         authResource.addResource("validate").addMethod("POST", authIntegration);
 
-        // /chat endpoint
+        // /chat endpoint (no authentication for now - can be added later)
         Resource chatResource = api.getRoot().addResource("chat");
-        chatResource.addMethod("POST", chatIntegration, MethodOptions.builder()
-                .authorizationType(AuthorizationType.CUSTOM)
-                .build());
+        chatResource.addMethod("POST", chatIntegration);
 
         // /analysis endpoints
         Resource analysisResource = api.getRoot().addResource("analysis");

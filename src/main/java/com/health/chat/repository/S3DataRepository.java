@@ -132,6 +132,53 @@ public class S3DataRepository implements DataRepository {
         
         return results;
     }
+    
+    @Override
+    public List<NutritionInfo> getNutritionInfoByDateRange(String userId, LocalDate start, LocalDate end) {
+        List<NutritionInfo> results = new ArrayList<>();
+        
+        LocalDate current = start;
+        while (!current.isAfter(end)) {
+            NutritionInfo info = getNutritionInfo(userId, current);
+            if (info != null) {
+                results.add(info);
+            }
+            current = current.plusDays(1);
+        }
+        
+        return results;
+    }
+    
+    @Override
+    public List<MentalState> getMentalStatesByDateRange(String userId, LocalDate start, LocalDate end) {
+        List<MentalState> results = new ArrayList<>();
+        
+        LocalDate current = start;
+        while (!current.isAfter(end)) {
+            MentalState state = getMentalState(userId, current);
+            if (state != null) {
+                results.add(state);
+            }
+            current = current.plusDays(1);
+        }
+        
+        return results;
+    }
+    
+    @Override
+    public List<TankaPoem> getTankasByDateRange(String userId, LocalDate start, LocalDate end) {
+        List<TankaPoem> allTankas = getTankaHistory(userId);
+        List<TankaPoem> results = new ArrayList<>();
+        
+        for (TankaPoem tanka : allTankas) {
+            LocalDate tankaDate = tanka.getDate();
+            if (tankaDate != null && !tankaDate.isBefore(start) && !tankaDate.isAfter(end)) {
+                results.add(tanka);
+            }
+        }
+        
+        return results;
+    }
 
     // Helper methods for building S3 keys with date-based directory structure
     private String buildHealthDataKey(String userId, LocalDate date, String timestamp) {

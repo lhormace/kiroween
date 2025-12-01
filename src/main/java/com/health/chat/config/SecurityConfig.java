@@ -4,22 +4,77 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 
+/**
+ * Security configuration for production environment.
+ * Implements security best practices for AWS deployment.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()  // ローカル開発用：すべてのリクエストを許可
+            // CSRF protection
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/actuator/**") // Allow actuator endpoints for health checks
             )
-            .formLogin(form -> form.disable())
-            .httpBasic(basic -> basic.disable());
+            
+            // Authorization rules
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/actuator/health", "/actuator/info").permitAll() // Health check endpoints
+                .requestMatchers("/login", "/register", "/css/**", "/js/**", "/images/**").permitAll() // Public resources
+                .anyRequest().authenticated() // All other requests require authentication
+            )
+            
+            // Form login configuration
+            .formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/chat", true)
+                .permitAll()
+            )
+            
+            // Logout configuration
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID", "HEALTH_CHAT_SESSION")
+                .permitAll()
+            )
+            
+            // Session management
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false)
+            )
+            
+            // Security headers
+            .headers(headers -> headers
+                .xssProtection(xss -> xss
+                    .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)
+                )
+                .contentSecurityPolicy(csp -> csp
+                    .policyDirectives("default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:;")
+                )
+                .frameOptions(frame -> frame.deny())
+                .httpStrictTransportSecurity(hsts -> hsts
+                    .includeSubDomains(true)
+                    .maxAgeInSeconds(31536000)
+                )
+            );
 
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12); // Strength 12 for production
     }
 }

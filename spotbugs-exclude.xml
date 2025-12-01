@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Exclude test classes from certain checks -->
+    <Match>
+        <Class name="~.*Test$"/>
+        <Bug pattern="DM_DEFAULT_ENCODING"/>
+    </Match>
+    
+    <!-- Exclude generated code -->
+    <Match>
+        <Class name="~.*\.cdk\..*"/>
+    </Match>
+    
+    <!-- Exclude Lambda handlers from serialization warnings -->
+    <Match>
+        <Class name="~.*Handler$"/>
+        <Bug pattern="SE_BAD_FIELD"/>
+    </Match>
+    
+    <!-- Allow System.out in development mode checks -->
+    <Match>
+        <Or>
+            <Class name="com.health.chat.web.AuthController"/>
+            <Class name="com.health.chat.web.ChatController"/>
+        </Or>
+        <Bug pattern="INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE"/>
+    </Match>
+</FindBugsFilter>

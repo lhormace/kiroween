@@ -16,6 +16,7 @@
 /Users/lhormace/kiroween/src/main/java/com/health/chat/service/TankaGenerator.java
 /Users/lhormace/kiroween/src/main/java/com/health/chat/service/SimpleTankaGenerator.java
 /Users/lhormace/kiroween/src/main/java/com/health/chat/model/PFCBalance.java
+/Users/lhormace/kiroween/src/main/java/com/health/chat/web/AnalysisController.java
 /Users/lhormace/kiroween/src/main/java/com/health/chat/service/JwtAuthenticationService.java
 /Users/lhormace/kiroween/src/main/java/com/health/chat/model/AdviceResult.java
 /Users/lhormace/kiroween/src/main/java/com/health/chat/repository/LocalFileDataRepository.java
@@ -37,6 +38,7 @@
 /Users/lhormace/kiroween/src/main/java/com/health/chat/model/AuthResult.java
 /Users/lhormace/kiroween/src/main/java/com/health/chat/service/MentalStateAnalyzer.java
 /Users/lhormace/kiroween/src/main/java/com/health/chat/model/NutritionInfo.java
+/Users/lhormace/kiroween/src/main/java/com/health/chat/config/AwsConfig.java
 /Users/lhormace/kiroween/src/main/java/com/health/chat/service/BasicNutritionEstimator.java
 /Users/lhormace/kiroween/src/main/java/com/health/chat/service/GraphGenerator.java
 /Users/lhormace/kiroween/src/main/java/com/health/chat/model/UserProfile.java
