@@ -27,23 +27,12 @@ public class AppConfig {
     }
 
     @Bean
-    public S3Client s3Client() {
-        if (localMode) {
-            // ローカルモードではS3クライアントを作成しない
-            return null;
-        }
-        return S3Client.builder()
-                .region(Region.of(awsRegion))
-                .build();
-    }
-
-    @Bean
     public DataRepository dataRepository(@Value("${local.data.directory:./data}") String localDataDirectory) {
         if (localMode) {
             // ローカルモードではファイルベースのリポジトリを使用
             return new com.health.chat.repository.LocalFileDataRepository(localDataDirectory);
         } else {
-            // 本番モードではS3を使用
+            // 本番モードではS3を使用（AwsConfigで定義されたs3Clientを使用）
             S3Client client = S3Client.builder().region(Region.of(awsRegion)).build();
             return new S3DataRepository(client, bucketName);
         }

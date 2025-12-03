@@ -1,0 +1,29 @@
+# Exclude Dockerfile (not used for EB Java platform)
+Dockerfile
+
+# Exclude git
+.git/
+.gitignore
+
+# Exclude IDE files
+.idea/
+.vscode/
+*.iml
+
+# Exclude test data
+data/
+
+# Exclude CDK
+cdk/
+
+# Exclude documentation
+*.md
+!README.md
+
+# Exclude logs
+*.log
+
+# Include required files
+!application.jar
+!.ebextensions/
+!.elasticbeanstalk/config.yml
