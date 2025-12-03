@@ -29,7 +29,8 @@ public class SecurityConfig {
             // Authorization rules
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/actuator/health", "/actuator/info").permitAll() // Health check endpoints
-                .requestMatchers("/login", "/register", "/css/**", "/js/**", "/images/**").permitAll() // Public resources
+                .requestMatchers("/login", "/register", "/test-register").permitAll() // Public auth endpoints (GET and POST)
+                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll() // Public resources
                 .anyRequest().authenticated() // All other requests require authentication
             )
             

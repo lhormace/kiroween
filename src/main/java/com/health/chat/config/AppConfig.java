@@ -67,4 +67,10 @@ public class AppConfig {
     public HealthAdvisorAI healthAdvisorAI(MCPClient mcpClient) {
         return new MCPBasedHealthAdvisor(mcpClient);
     }
+    
+    @Bean
+    public AuthenticationService authenticationService(DataRepository dataRepository, 
+                                                       @Value("${jwt.secret:default-secret-key-change-in-production}") String jwtSecret) {
+        return new JwtAuthenticationService(dataRepository, jwtSecret);
+    }
 }
