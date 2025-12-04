@@ -3,15 +3,25 @@ package com.health.chat.web;
 import com.health.chat.model.AuthResult;
 import com.health.chat.service.AuthenticationService;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collections;
+
 @Controller
 public class AuthController {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired(required = false)
     private AuthenticationService authenticationService;
@@ -43,8 +53,21 @@ public class AuthController {
                 AuthResult result = authenticationService.authenticate(username, password);
                 
                 if (result.isSuccess()) {
+                    // Set session attributes
                     session.setAttribute("token", result.getToken());
                     session.setAttribute("userId", result.getUserId());
+                    
+                    // Set Spring Security authentication
+                    UsernamePasswordAuthenticationToken authentication = 
+                        new UsernamePasswordAuthenticationToken(
+                            result.getUserId(), 
+                            null, 
+                            Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+                        );
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, 
+                                       SecurityContextHolder.getContext());
+                    
                     return "redirect:/chat";
                 } else {
                     model.addAttribute("error", result.getErrorMessage());
@@ -79,17 +102,10 @@ public class AuthController {
 
     @GetMapping("/register")
     public String registerPage(HttpSession session) {
-        System.out.println("=== REGISTER PAGE REQUEST ===");
         if (session.getAttribute("token") != null) {
             return "redirect:/chat";
         }
         return "register";
-    }
-    
-    @GetMapping("/test-register")
-    @org.springframework.web.bind.annotation.ResponseBody
-    public String testRegister() {
-        return "AuthController is working! AuthService: " + (authenticationService != null);
     }
 
     @PostMapping("/register")
@@ -98,38 +114,50 @@ public class AuthController {
                           @RequestParam String email,
                           HttpSession session,
                           Model model) {
-        System.out.println("=== REGISTER REQUEST RECEIVED ===");
-        System.out.println("Username: " + username);
-        System.out.println("Email: " + email);
-        System.out.println("AuthService available: " + (authenticationService != null));
+        LOGGER.info("=== REGISTER REQUEST ===");
+        LOGGER.info("Username: {}", username);
+        LOGGER.info("Email: {}", email);
+        LOGGER.info("AuthService available: {}", (authenticationService != null));
         
         try {
             // Use authentication service if available
             if (authenticationService != null) {
-                System.out.println("Calling registerUser...");
+                LOGGER.info("Calling registerUser...");
                 AuthResult result = authenticationService.registerUser(username, password, email);
-                System.out.println("Registration result - Success: " + result.isSuccess());
-                System.out.println("Registration result - Error: " + result.getErrorMessage());
+                LOGGER.info("Result success: {}", result.isSuccess());
+                LOGGER.info("Result error: {}", result.getErrorMessage());
                 
                 if (result.isSuccess()) {
+                    // Set session attributes
                     session.setAttribute("token", result.getToken());
                     session.setAttribute("userId", result.getUserId());
-                    System.out.println("Registration successful, redirecting to /chat");
+                    
+                    // Set Spring Security authentication
+                    UsernamePasswordAuthenticationToken authentication = 
+                        new UsernamePasswordAuthenticationToken(
+                            result.getUserId(), 
+                            null, 
+                            Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+                        );
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, 
+                                       SecurityContextHolder.getContext());
+                    
+                    LOGGER.info("Registration successful, redirecting to /chat");
                     return "redirect:/chat";
                 } else {
-                    System.out.println("Registration failed: " + result.getErrorMessage());
+                    LOGGER.warn("Registration failed: {}", result.getErrorMessage());
                     model.addAttribute("error", result.getErrorMessage());
                     return "register";
                 }
             } else {
-                System.out.println("AuthenticationService is null!");
+                LOGGER.error("AuthenticationService is null!");
                 model.addAttribute("error", "ユーザー登録機能は現在利用できません");
                 return "register";
             }
         } catch (Exception e) {
-            System.out.println("Exception during registration: " + e.getMessage());
-            e.printStackTrace();
-            model.addAttribute("error", "登録エラーが発生しました");
+            LOGGER.error("Exception during registration", e);
+            model.addAttribute("error", "登録エラーが発生しました: " + e.getMessage());
             return "register";
         }
     }
