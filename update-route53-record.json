@@ -1,0 +1,16 @@
+{
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "lhormace.com",
+        "Type": "A",
+        "AliasTarget": {
+          "HostedZoneId": "Z14GRHDCWA56QT",
+          "DNSName": "awseb--AWSEB-EpqbIpENPtNm-693114799.ap-northeast-1.elb.amazonaws.com",
+          "EvaluateTargetHealth": true
+        }
+      }
+    }
+  ]
+}
