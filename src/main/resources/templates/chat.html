@@ -253,7 +253,7 @@
         </div>
     </div>
 
-    <script>
+    <script th:inline="javascript">
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
         const messagesDiv = document.getElementById('messages');
@@ -261,6 +261,10 @@
         
         let healthChart = null;
         let currentTimeRange = 'ONE_MONTH';
+        
+        // Get CSRF token from meta tag
+        const csrfToken = /*[[${_csrf.token}]]*/ '';
+        const csrfHeader = /*[[${_csrf.headerName}]]*/ '';
 
         // Initialize graph on page load
         document.addEventListener('DOMContentLoaded', () => {
@@ -412,11 +416,18 @@
             sendBtn.disabled = true;
             
             // Send to server
+            const headers = {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            };
+            
+            // Add CSRF token if available
+            if (csrfToken && csrfHeader) {
+                headers[csrfHeader] = csrfToken;
+            }
+            
             fetch('/api/chat', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
+                headers: headers,
                 body: `message=${encodeURIComponent(message)}`
             })
             .then(response => response.json())
