@@ -29,17 +29,13 @@ public class SecurityConfig {
             // Authorization rules
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/actuator/health", "/actuator/info").permitAll() // Health check endpoints
-                .requestMatchers("/login", "/register", "/test-register").permitAll() // Public auth endpoints (GET and POST)
+                .requestMatchers("/login", "/register").permitAll() // Public auth endpoints (GET and POST)
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll() // Public resources
                 .anyRequest().authenticated() // All other requests require authentication
             )
             
-            // Form login configuration
-            .formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/chat", true)
-                .permitAll()
-            )
+            // Disable form login - using custom authentication in AuthController
+            .formLogin(form -> form.disable())
             
             // Logout configuration
             .logout(logout -> logout
