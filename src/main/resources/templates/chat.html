@@ -34,7 +34,12 @@
             font-size: 20px;
         }
 
-        .logout-btn {
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn, .logout-btn {
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: none;
@@ -43,9 +48,11 @@
             cursor: pointer;
             font-size: 14px;
             transition: background 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .logout-btn:hover {
+        .nav-btn:hover, .logout-btn:hover {
             background: rgba(255, 255, 255, 0.3);
         }
 
@@ -217,9 +224,12 @@
 <body>
     <div class="header">
         <h1>健康管理チャットアドバイザー</h1>
-        <form method="post" action="/logout" style="display: inline;">
-            <button type="submit" class="logout-btn">ログアウト</button>
-        </form>
+        <div style="display: flex; gap: 10px;">
+            <a href="/analysis" style="background: rgba(255, 255, 255, 0.2); color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-size: 14px; text-decoration: none;">📊 分析画面</a>
+            <form method="post" action="/logout" style="display: inline;">
+                <button type="submit" class="logout-btn">ログアウト</button>
+            </form>
+        </div>
     </div>
 
     <div class="graph-section">
